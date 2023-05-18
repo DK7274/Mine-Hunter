@@ -6,6 +6,7 @@ pygame.init()
 
 #section for sprite images to be defined
 mineImage = pygame.image.load("Images\mine.png")
+mineImage = pygame.transform.scale(mineImage,(20,20)) #squaring and making image smaller
 
 
 #displaying window with height 1000 and width 950, with a blue background
@@ -26,10 +27,13 @@ class mine(object): #tells pyhton object
         self.height = height
     def draw(self,screen):
         screen.blit(mineImage,(self.x,self.y))
+
+
 mine1 =mine(100,100,100,100)
 mine2 = mine(200,200,50,50)
 mine1.draw(screen)
 pygame.display.update()
+
 #def mineSpawn():
 
 
