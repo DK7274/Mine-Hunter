@@ -10,7 +10,7 @@ mineImage = pygame.transform.scale(mineImage,(20,20)) #squaring and making image
 
 
 #displaying window with height 1000 and width 950, with a blue background
-screen = pygame.display.set_mode((1000,950))
+screen = pygame.display.set_mode((1000,700))
 backColour = (0,26,46)
 screen.fill(backColour)
 pygame.display.flip()
@@ -29,7 +29,9 @@ class mine(object): #tells pyhton object
         screen.blit(mineImage,(self.x,self.y))
 
 
-mine1 =mine(100,100,100,100)
+
+
+mine1 = mine(100,100,100,100)
 mine2 = mine(200,200,50,50)
 mine1.draw(screen)
 pygame.display.update()

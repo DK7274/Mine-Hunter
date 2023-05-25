@@ -25,8 +25,9 @@ while mineCount > 0:
     for n in range(0,len(xMines)):
         mineChance = random.randint(0,10)
         if mineChance == 1:
-            mineCount -= 1
-            xMines[n] += 1
+            if mineCount > 0:
+                mineCount -= 1
+                xMines[n] += 1
 
 print(xMines)
 
@@ -41,8 +42,10 @@ for n in range(0,len(yMines)):
             if yMines[n][m] == 0:
                 mineChance = random.randint(0,10)
                 if mineChance == 1:
-                    yMines[n][m] += 1
-                    mineCount -= 1
+                    if mineCount > 0:
+                        yMines[n][m] += 1
+                        mineCount -= 1
+
 
 
 
