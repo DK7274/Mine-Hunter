@@ -99,5 +99,5 @@ while not gameQuit:
             gameQuit = True
     #if gameStart == True:
     #    gameBoard()
-    else:
+    #else:
         #menuScreen
