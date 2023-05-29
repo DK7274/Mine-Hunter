@@ -2,8 +2,6 @@ import pygame
 import random
 
 #variables for mine randomiser
-xMines = [1,1,1,1,1,1,1,1,1,1] #array for n umber of mines down the x Axis
-
 mineCount = 20 #overall amound of mines
 
 mineRow1 = [0,0,0,0,0,0,0,0,0,0] #set of arrays for mine placement
@@ -20,10 +18,13 @@ mineRow0 = [0,0,0,0,0,0,0,0,0,0]
 yMines = [mineRow1,mineRow2,mineRow3,mineRow4,mineRow5,mineRow6,mineRow7,mineRow8,mineRow9,mineRow0]
 #array that holds mine arrays within it to be called
 
-#####
+pygame.init() # initializing pygame
 
-# initializing pygame
-pygame.init()
+#button variables
+button_dark = (1, 73, 128)
+button_light = (2, 127, 222)
+
+
 
 
 #section for sprite images to be defined
@@ -32,10 +33,12 @@ mineImage = pygame.transform.scale(mineImage,(20,20)) #squaring and making image
 
 
 #displaying window with height 1000 and width 950, with a blue background
-screen = pygame.display.set_mode((1000,700))
+screen = pygame.display.set_mode((700,700))
 backColour = (0,26,46)
 screen.fill(backColour)
 pygame.display.flip()
+width = screen.get_width()
+height = screen.get_height()
 
 #bool that checks if game quit or not
 gameQuit = False
@@ -50,18 +53,10 @@ class mine(object): #tells pyhton object
     def draw(self,screen):
         screen.blit(mineImage,(self.x,self.y))
 
-
-
-
-mine1 = mine(100,100,100,100)
-mine2 = mine(200,200,50,50)
-mine1.draw(screen)
-pygame.display.update()
-
 def mineSpawn():
     global mineCount
     global yMines
-
+    xMines = [1,1,1,1,1,1,1,1,1,1] #array for x mines to come from
     while mineCount > 0: #sequence to sort the extra 20 mines into different X axis
         for n in range(0,len(xMines)): #repeats through the array until all mines are used
             mineChance = random.randint(0,10) #1 in 10 chance of mine being placed per slot
@@ -80,11 +75,29 @@ def mineSpawn():
                         if mineCount > 0:
                             yMines[n][m] += 1
                             mineCount -= 1
+    print(xMines)
     print(yMines)
-mineSpawn()
+
+#class button(object):
+
+#def gameBoard(): #displays game screen
+
+#def helpScreen(): #displays help screen with tutorial
+
+#def menuScreen(): #displays menu screen to start game, open help screen
+
+
+
+
+
+gameStart = False #variable that determines if the actual game play on menu screen has been pressed
 
 # keep running until quit
 while not gameQuit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #
             gameQuit = True
+    #if gameStart == True:
+    #    gameBoard()
+    else:
+        menuScreen
