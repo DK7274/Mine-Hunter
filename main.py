@@ -23,6 +23,7 @@ pygame.init() # initializing pygame
 #button variables
 button_dark = (1, 73, 128)
 button_light = (2, 127, 222)
+mouseX,mouseY = (0,0) #sets mouse coordinate
 
 
 
@@ -84,7 +85,43 @@ def mineSpawn():
 
 #def helpScreen(): #displays help screen with tutorial
 
-#def menuScreen(): #displays menu screen to start game, open help screen
+def menuScreen(): #displays menu screen to start game, open help screen
+    global mouseX
+    global mouseY
+    global gameOn
+    #blitting the menu window#
+    screen.fill((0,26,46))
+    button_text_color = (0,0,0)
+    title_text_color = (25,40,156)
+    button_color = (25,40,156)
+    button_over_color = (6,17,99)
+    button_width = 200
+    button_height = 100
+    play_rect = [(screen.get_width() - button_width) / 2,
+                   screen.get_height() / 2 - button_height / 2,
+                   button_width, button_height]
+    button_font = pygame.font.SysFont("impact",20)
+    play_text = button_font.render("PLAY", True, button_text_color)
+    title_font = pygame.font.SysFont("impact", 50)
+    title_text = title_font.render("MINEHUNTER", True, title_text_color)
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX,mouseY = event.pos
+            if(play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
+            play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
+                gameOn = True #if click on the button then you start the game#
+        if event.type == pygame.MOUSEMOTION:
+            mouseX,mouseY = event.pos #code for changing button colour on mouse rollover#
+    if (play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
+            play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
+        pygame.draw.rect(screen, button_over_color, play_rect)
+    else:
+        pygame.draw.rect(screen, button_color, play_rect)
+    screen.blit(play_text, (play_rect[0] + (button_width - play_text.get_width()) / 2,
+                              play_rect[1] + (button_height / 2 - play_text.get_height() / 2)))
+    screen.blit(title_text,(356.625,100))
+
+    pygame.display.update()
 
 
 
@@ -95,9 +132,9 @@ gameStart = False #variable that determines if the actual game play on menu scre
 # keep running until quit
 while not gameQuit:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: #
+        if event.type == pygame.QUIT:
             gameQuit = True
     #if gameStart == True:
     #    gameBoard()
-    #else:
-        #menuScreen
+    else:
+        menuScreen()
