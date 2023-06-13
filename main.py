@@ -2,7 +2,7 @@ import pygame
 import random
 
 #variables for mine randomiser
-mineCount = 20 #overall amound of mines
+mineCount = 30 #overall amound of mines
 
 mineRow1 = [0,0,0,0,0,0,0,0,0,0] #set of arrays for mine placement
 mineRow2 = [0,0,0,0,0,0,0,0,0,0]
@@ -23,9 +23,8 @@ pygame.init() # initializing pygame
 #button variables
 button_dark = (1, 73, 128)
 button_light = (2, 127, 222)
+
 mouseX,mouseY = (0,0) #sets mouse coordinate
-
-
 
 
 #section for sprite images to be defined
@@ -83,42 +82,73 @@ def mineSpawn():
 
 #def gameBoard(): #displays game screen
 
-#def helpScreen(): #displays help screen with tutorial
-
-def menuScreen(): #displays menu screen to start game, open help screen
+def guideScreen(): #displays help screen with tutorial
+    print('guide')
+def menuScreen(): #displays menu screen to start game, open help screen, and quit
     global mouseX
     global mouseY
     global gameOn
+    global gameQuit
+    global guideOpen
     #blitting the menu window#
     screen.fill((0,26,46))
+    #variables for buttons
     button_text_color = (0,0,0)
     title_text_color = (25,40,156)
     button_color = (25,40,156)
     button_over_color = (6,17,99)
     button_width = 200
     button_height = 100
-    play_rect = [(screen.get_width() - button_width) / 2,
-                   screen.get_height() / 2 - button_height / 2,
-                   button_width, button_height]
+    play_rect = [(screen.get_width() - button_width) / 2 , 250,button_width, button_height]
+    guide_rect = [(280-button_width),400,button_width,button_height]
+    quit_rect = [(560-button_width),400,button_width,button_height]
+    #fonts and texts for the buttons
     button_font = pygame.font.SysFont("impact",20)
     play_text = button_font.render("PLAY", True, button_text_color)
+    guide_text = button_font.render("GUIDE",True,button_text_color)
+    quit_text = button_font.render("QUIT",True, button_text_color)
+    #font and text for the title
     title_font = pygame.font.SysFont("impact", 50)
     title_text = title_font.render("MINEHUNTER", True, title_text_color)
+
+    #draws the button rectangles onto the screen
+    pygame.draw.rect(screen, button_color, play_rect)
+    pygame.draw.rect(screen, button_color, quit_rect)
+    pygame.draw.rect(screen, button_color, guide_rect)
+
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouseX,mouseY = event.pos
+        if event.type == pygame.MOUSEBUTTONDOWN: #event triggered on clicking the mouse
+            mouseX,mouseY = event.pos #get mouse pos
             if(play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
             play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
                 gameOn = True #if click on the button then you start the game#
-        if event.type == pygame.MOUSEMOTION:
-            mouseX,mouseY = event.pos #code for changing button colour on mouse rollover#
+                print("gameStart")
+            elif (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
+            quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
+                gameQuit = True #if clcik on button then game quits
+            elif (guide_rect[0] <= mouseX <= guide_rect[0] + guide_rect[2] and
+                  guide_rect[1] <= mouseY <= guide_rect[1] + guide_rect[3]):
+                guideOpen = True #if click on button then open the guide
+        if event.type == pygame.MOUSEMOTION: #event triggered on mouse movement
+            mouseX,mouseY = event.pos
+    #these three if statements change the color of seperate buttons if they are moused over
     if (play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
             play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
         pygame.draw.rect(screen, button_over_color, play_rect)
-    else:
-        pygame.draw.rect(screen, button_color, play_rect)
+    elif (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
+            quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
+        pygame.draw.rect(screen,button_over_color,quit_rect)
+    elif (guide_rect[0] <= mouseX <= guide_rect[0] + guide_rect[2] and
+            guide_rect[1] <= mouseY <= guide_rect[1] + guide_rect[3]):
+        pygame.draw.rect(screen,button_over_color,guide_rect)
+    #sets the text on the screen
     screen.blit(play_text, (play_rect[0] + (button_width - play_text.get_width()) / 2,
                               play_rect[1] + (button_height / 2 - play_text.get_height() / 2)))
+    screen.blit(quit_text,(quit_rect[0] + (button_width - quit_text.get_width()) / 2,
+                              quit_rect[1] + (button_height / 2 - quit_text.get_height() / 2)))
+    screen.blit(guide_text, (guide_rect[0] + (button_width - guide_text.get_width()) / 2,
+                            guide_rect[1] + (button_height / 2 - guide_text.get_height() / 2)))
+
     screen.blit(title_text,(356.625,100))
 
     pygame.display.update()
@@ -128,6 +158,7 @@ def menuScreen(): #displays menu screen to start game, open help screen
 
 
 gameStart = False #variable that determines if the actual game play on menu screen has been pressed
+guideOpen = False
 
 # keep running until quit
 while not gameQuit:
@@ -136,5 +167,7 @@ while not gameQuit:
             gameQuit = True
     #if gameStart == True:
     #    gameBoard()
+    if guideOpen == True:
+        guideScreen()
     else:
         menuScreen()
