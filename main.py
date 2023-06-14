@@ -2,27 +2,36 @@ import pygame
 import random
 
 #variables for mine randomiser
-mineCount = 30 #overall amound of mines
+mineCount = 25 #overall amound of mines
 
-mineRow1 = [0,0,0,0,0,0,0,0,0,0] #set of arrays for mine placement
-mineRow2 = [0,0,0,0,0,0,0,0,0,0]
-mineRow3 = [0,0,0,0,0,0,0,0,0,0]
-mineRow4 = [0,0,0,0,0,0,0,0,0,0]
-mineRow5 = [0,0,0,0,0,0,0,0,0,0]
-mineRow6 = [0,0,0,0,0,0,0,0,0,0]
-mineRow7 = [0,0,0,0,0,0,0,0,0,0]
-mineRow8 = [0,0,0,0,0,0,0,0,0,0]
-mineRow9 = [0,0,0,0,0,0,0,0,0,0]
-mineRow0 = [0,0,0,0,0,0,0,0,0,0]
+mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
+mineRow2 = [0,0,0,0,0,0,0,0]
+mineRow3 = [0,0,0,0,0,0,0,0]
+mineRow4 = [0,0,0,0,0,0,0,0]
+mineRow5 = [0,0,0,0,0,0,0,0]
+mineRow6 = [0,0,0,0,0,0,0,0]
+mineRow7 = [0,0,0,0,0,0,0,0]
+mineRow8 = [0,0,0,0,0,0,0,0]
 
-yMines = [mineRow1,mineRow2,mineRow3,mineRow4,mineRow5,mineRow6,mineRow7,mineRow8,mineRow9,mineRow0]
+yMines = [mineRow1,mineRow2,mineRow3,mineRow4,mineRow5,mineRow6,mineRow7,mineRow8]
 #array that holds mine arrays within it to be called
 
-pygame.init() # initializing pygame
+buttonX = [1,2,3,4,5,6,7,8]
+buttonY = [1,2,3,4,5,6,7,8]
 
-#button variables
-button_dark = (1, 73, 128)
-button_light = (2, 127, 222)
+buttonState1 = [0,0,0,0,0,0,0,0] #set of arrays for button detection
+buttonState2 = [0,0,0,0,0,0,0,0]
+buttonState3 = [0,0,0,0,0,0,0,0]
+buttonState4 = [0,0,0,0,0,0,0,0]
+buttonState5 = [0,0,0,0,0,0,0,0]
+buttonState6 = [0,0,0,0,0,0,0,0]
+buttonState7 = [0,0,0,0,0,0,0,0]
+buttonState8 = [0,0,0,0,0,0,0,0]
+
+yButtonState = [buttonState1,buttonState2,buttonState3,buttonState4,buttonState5,buttonState6,buttonState7,buttonState8]
+#array that holds button arrays within it to be called
+
+pygame.init() # initializing pygame
 
 mouseX,mouseY = (0,0) #sets mouse coordinate
 
@@ -56,7 +65,7 @@ class mine(object): #tells pyhton object
 def mineSpawn():
     global mineCount
     global yMines
-    xMines = [1,1,1,1,1,1,1,1,1,1] #array for x mines to come from
+    xMines = [0,0,0,0,0,0,0,0] #array for x mines to come from
     while mineCount > 0: #sequence to sort the extra 20 mines into different X axis
         for n in range(0,len(xMines)): #repeats through the array until all mines are used
             mineChance = random.randint(0,10) #1 in 10 chance of mine being placed per slot
@@ -78,16 +87,41 @@ def mineSpawn():
     print(xMines)
     print(yMines)
 
-#class button(object):
+class button(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = 8
+        self.height = 8
+    def draw(self,screen):
+        button_light = (2, 127, 222)  # game button colour
+        gameButton_rect = (self.x,self.y,)
 
-#def gameBoard(): #displays game screen
+#def gameBoardUpdate():
+
+def gameBoard(): #displays game screen
+    global gameStart
+    global mineCount
+    global mouseX
+    global mouseY
+    gameOver = False
+    mineSpawn() #randomises mines
+    while gameOver == False:
+        #setting up variables for displaying timer, mine#
+        screen.fill((0, 26, 46))
+        screen_text_color = (0,0,0)
+        menu_font = pygame.font.SysFont("impact",20)
+        mineCount_text = ()
+    gameStart = False
 
 def guideScreen(): #displays help screen with tutorial
+    global guideOpen
     print('guide')
+    guideOpen = False
 def menuScreen(): #displays menu screen to start game, open help screen, and quit
     global mouseX
     global mouseY
-    global gameOn
+    global gameStart
     global gameQuit
     global guideOpen
     #blitting the menu window#
@@ -121,7 +155,7 @@ def menuScreen(): #displays menu screen to start game, open help screen, and qui
             mouseX,mouseY = event.pos #get mouse pos
             if(play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
             play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
-                gameOn = True #if click on the button then you start the game#
+                gameStart = True #if click on the button then you start the game#
                 print("gameStart")
             elif (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
@@ -165,8 +199,8 @@ while not gameQuit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameQuit = True
-    #if gameStart == True:
-    #    gameBoard()
+    if gameStart == True:
+        gameBoard()
     if guideOpen == True:
         guideScreen()
     else:
