@@ -87,31 +87,48 @@ def mineSpawn():
     print(xMines)
     print(yMines)
 
-class button(object):
-    def __init__(self,x,y,width,height):
-        self.x = x
-        self.y = y
-        self.width = 8
-        self.height = 8
-    def draw(self,screen):
-        button_light = (2, 127, 222)  # game button colour
-        gameButton_rect = (self.x,self.y,)
 
 #def gameBoardUpdate():
 
+def buttonDraw():
+    #variables for button dimesnsions and placement
+    button_width = 60
+    button_height = 60
+    buttonX = 100
+    buttonY = 100
+    buttonSpacing = 10
+    buttonXCount = 8
+    buttonYCount = 8
+    button_light = (2, 127, 222)
+
+    while buttonXCount > 0:
+        button_rect = (buttonX,buttonY,button_width,button_height)
+        pygame.draw.rect(screen,button_light,button_rect)
+        buttonX = buttonX + button_width + buttonSpacing
+        buttonXCount -= 1
+
 def gameBoard(): #displays game screen
     global gameStart
-    global mineCount
     global mouseX
     global mouseY
     gameOver = False
+    flagCount = 25
     mineSpawn() #randomises mines
-    while gameOver == False:
-        #setting up variables for displaying timer, mine#
-        screen.fill((0, 26, 46))
-        screen_text_color = (0,0,0)
-        menu_font = pygame.font.SysFont("impact",20)
-        mineCount_text = ()
+    # setting up variables for displaying timer, flag counter, buttons#
+    screen.fill((0, 26, 46))
+    screen_text_color = (0, 0, 0)
+    menu_font = pygame.font.SysFont("impact", 20)
+    flagCount_text = menu_font.render(str(flagCount), True, screen_text_color)
+    screen.blit(flagCount_text, (330, 20))
+    buttonDraw()
+
+
+
+
+    while gameOver == False: #main loop for game, everything will on the game board will happen in here
+
+
+        pygame.display.update()
     gameStart = False
 
 def guideScreen(): #displays help screen with tutorial
