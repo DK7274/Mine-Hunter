@@ -90,22 +90,7 @@ def mineSpawn():
 
 #def gameBoardUpdate():
 
-def buttonDraw():
-    #variables for button dimesnsions and placement
-    button_width = 60
-    button_height = 60
-    buttonX = 100
-    buttonY = 100
-    buttonSpacing = 10
-    buttonXCount = 8
-    buttonYCount = 8
-    button_light = (2, 127, 222)
-
-    while buttonXCount > 0:
-        button_rect = (buttonX,buttonY,button_width,button_height)
-        pygame.draw.rect(screen,button_light,button_rect)
-        buttonX = buttonX + button_width + buttonSpacing
-        buttonXCount -= 1
+#def buttonDraw():
 
 def gameBoard(): #displays game screen
     global gameStart
@@ -116,18 +101,48 @@ def gameBoard(): #displays game screen
     mineSpawn() #randomises mines
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill((0, 26, 46))
-    screen_text_color = (0, 0, 0)
-    menu_font = pygame.font.SysFont("impact", 20)
-    flagCount_text = menu_font.render(str(flagCount), True, screen_text_color)
+    text_color = (0, 0, 0)
+    button_light = (2, 127, 222)
+    game_font = pygame.font.SysFont("impact", 20)
+    quit_rect = [500,20,70,50]
+    quit_text = game_font.render("QUIT",True, text_color)
+
+    #draws score text, quit button onto the screen
+    pygame.draw.rect(screen, button_light, quit_rect)
+    screen.blit(quit_text,(quit_rect[0] + (70 - quit_text.get_width()) / 2,
+                              quit_rect[1] + (50 / 2 - quit_text.get_height() / 2)))
+    flagCount_text = game_font.render(str(flagCount), True, text_color)
     screen.blit(flagCount_text, (330, 20))
-    buttonDraw()
 
-
+    #variables for button dimesnsions and placement
+    button_width = 60
+    button_height = 60
+    buttonX = 100
+    buttonY = 100
+    buttonSpacing = 10
+    buttonXCount = 8
+    buttonYCount = 8
+    #actual loop to draw buttons#
+    #loops through 8 times repeating on X axis, then repeats that sequence 8 times down the Y axis
+    while buttonYCount > 0:
+        while buttonXCount > 0:
+            button_rect = (buttonX,buttonY,button_width,button_height)
+            pygame.draw.rect(screen,button_light,button_rect)
+            buttonX = buttonX + button_width + buttonSpacing
+            buttonXCount -= 1
+        buttonX = 100
+        buttonXCount = 8
+        buttonY = buttonY + button_height + buttonSpacing
+        buttonYCount -= 1
 
 
     while gameOver == False: #main loop for game, everything will on the game board will happen in here
-
-
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouseX,mouseY = event.pos
+                if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
+            quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
+                    gameOver = True
         pygame.display.update()
     gameStart = False
 
