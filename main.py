@@ -35,6 +35,8 @@ pygame.init() # initializing pygame
 
 mouseX,mouseY = (0,0) #sets mouse coordinate
 
+LEFT = 1 #variables for detection of which mouse button is pressed
+RIGHT = 3
 
 #section for sprite images to be defined
 mineImage = pygame.image.load("Images\mine.png")
@@ -100,7 +102,7 @@ def gameBoard(): #displays game screen
     flagCount = 25
     mineSpawn() #randomises mines
     # setting up variables for displaying timer, flag counter, buttons#
-    screen.fill((0, 26, 46))
+    screen.fill(backColour)
     text_color = (0, 0, 0)
     button_light = (2, 127, 222)
     game_font = pygame.font.SysFont("impact", 20)
@@ -122,6 +124,8 @@ def gameBoard(): #displays game screen
     buttonSpacing = 10
     buttonXCount = 8
     buttonYCount = 8
+    clickX = 0
+    clickY = 0
     #actual loop to draw buttons#
     #loops through 8 times repeating on X axis, then repeats that sequence 8 times down the Y axis
     while buttonYCount > 0:
@@ -135,14 +139,45 @@ def gameBoard(): #displays game screen
         buttonY = buttonY + button_height + buttonSpacing
         buttonYCount -= 1
 
+    buttonX = 100 #resets coordinates of buttons back to default position
+    buttonY = 100
+
 
     while gameOver == False: #main loop for game, everything will on the game board will happen in here
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
                 mouseX,mouseY = event.pos
-                if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
+                if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and #quit buton on the game board
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
                     gameOver = True
+                while clickY < 8 and gameOver is False: #left click for remove box checking
+                    while clickX < 8 and gameOver == False:
+                        button_rect = (buttonX,buttonY,button_width,button_height)
+                        if (button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
+                                button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
+                            if yMines[clickY][clickX] == 1: #if mine is on click then game over
+                                print("game over")
+                                gameOver = True
+                            elif yButtonState[clickY][clickX] == 0:
+                                print("square cleared")
+                                yButtonState[clickY][clickX] = 1
+                                break
+
+                        buttonX = buttonX + button_width + buttonSpacing
+                        clickX += 1
+                    buttonY = buttonY + button_height + buttonSpacing
+                    buttonX = 100
+                    clickX = 0
+                    print("row complete")
+                    clickY += 1
+                print(yButtonState)
+                print("completed")
+                clickX = 0
+                clickY = 0
+
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == RIGHT: #right click for flag checking
+                print('right mouse click')
+
         pygame.display.update()
     gameStart = False
 
@@ -184,6 +219,7 @@ def menuScreen(): #displays menu screen to start game, open help screen, and qui
 
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN: #event triggered on clicking the mouse
+            print(event.button)
             mouseX,mouseY = event.pos #get mouse pos
             if(play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
             play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
