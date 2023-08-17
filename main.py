@@ -150,19 +150,29 @@ def gameBoard(): #displays game screen
                 if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and #quit buton on the game board
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
                     gameOver = True
-                button_rect = (buttonX,buttonY,button_width,button_height)
                 print("clicked")
-                while clickY < 8 and gameOver is False: #left click for remove box checking
-                    print('clicked2')
-                    if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
+                button_rect = [buttonX,buttonY,button_width,button_height]
+                while clickY < 8 and gameOver is False: #left click for remove box checking on the y-axis
+                    button_rect[1] = buttonY
+                    if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]): #checking whether the location is in the correct x axis
                         print("correct line")
+                        #while clickX < 8 and gameOver is False:
+                                #print("correct square")
+                                #break
+                            #else:
+                            #    buttonX = buttonX + button_height + buttonSpacing
+                            #    clickX += 1
+                            #print(str(clickX))
+
+                        break
                         #while clickX < 8 and gameOver == False:
 
                     else:
                         buttonY = buttonY + button_height + buttonSpacing
-                        ("print going to new line")
                         clickY += 1
+                    print(str(clickY))
                 clickY = 0
+                buttonY = 100
 
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == RIGHT: #right click for flag checking
