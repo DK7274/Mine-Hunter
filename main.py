@@ -150,30 +150,20 @@ def gameBoard(): #displays game screen
                 if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and #quit buton on the game board
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
                     gameOver = True
+                button_rect = (buttonX,buttonY,button_width,button_height)
+                print("clicked")
                 while clickY < 8 and gameOver is False: #left click for remove box checking
-                    while clickX < 8 and gameOver == False:
-                        button_rect = (buttonX,buttonY,button_width,button_height)
-                        if (button_rect[0] <= mouseX <= button_rect[0] + button_rect[2] and
-                                button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
-                            if yMines[clickY][clickX] == 1: #if mine is on click then game over
-                                print("game over")
-                                gameOver = True
-                            elif yButtonState[clickY][clickX] == 0:
-                                print("square cleared")
-                                yButtonState[clickY][clickX] = 1
-                                break
+                    print('clicked2')
+                    if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]):
+                        print("correct line")
+                        #while clickX < 8 and gameOver == False:
 
-                        buttonX = buttonX + button_width + buttonSpacing
-                        clickX += 1
-                    buttonY = buttonY + button_height + buttonSpacing
-                    buttonX = 100
-                    clickX = 0
-                    print("row complete")
-                    clickY += 1
-                print(yButtonState)
-                print("completed")
-                clickX = 0
+                    else:
+                        buttonY = buttonY + button_height + buttonSpacing
+                        ("print going to new line")
+                        clickY += 1
                 clickY = 0
+
 
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == RIGHT: #right click for flag checking
                 print('right mouse click')
