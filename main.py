@@ -162,15 +162,12 @@ def gameBoard(): #displays game screen
                                 print("correct square")
                                 break
                             else:
-                                buttonX = buttonX + button_height + buttonSpacing
+                                buttonX = buttonX + button_width + buttonSpacing
                                 clickX += 1
                             print(str(clickX))
                         clickX = 0
                         buttonX = 100
-
                         break
-                        #while clickX < 8 and gameOver == False:
-
                     else:
                         buttonY = buttonY + button_height + buttonSpacing
                         clickY += 1
