@@ -156,13 +156,17 @@ def gameBoard(): #displays game screen
                     button_rect[1] = buttonY
                     if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]): #checking whether the location is in the correct x axis
                         print("correct line")
-                        #while clickX < 8 and gameOver is False:
-                                #print("correct square")
-                                #break
-                            #else:
-                            #    buttonX = buttonX + button_height + buttonSpacing
-                            #    clickX += 1
-                            #print(str(clickX))
+                        while clickX < 8 and gameOver is False:
+                            button_rect[0] = buttonX
+                            if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]:
+                                print("correct square")
+                                break
+                            else:
+                                buttonX = buttonX + button_height + buttonSpacing
+                                clickX += 1
+                            print(str(clickX))
+                        clickX = 0
+                        buttonX = 100
 
                         break
                         #while clickX < 8 and gameOver == False:
