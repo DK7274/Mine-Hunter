@@ -93,6 +93,7 @@ def mineSpawn():
 def clearedSquare(): #clears the square then subsequently checks surrounding squares to give a number
     pygame.draw.rect(screen,backColour,button_rect)
     yButtonState[clickY][clickX] = 1
+    surround_font = pygame.font.SysFont("impact",40)
     mineDetectCount = 0
     if clickY > 0: #have to split them all up into seperate if statements because otherwise it rolls over through to the other edge
         if yMines[clickY - 1][clickX] == 1:
@@ -118,9 +119,10 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
     if clickX < 7:
         if yMines[clickY][clickX + 1] == 1:
             mineDetectCount += 1
-
+    if mineDetectCount > 1:
+        surround_text = surround_font.render(str(mineDetectCount),True,flag_color)
+        screen.blit(surround_text,(button_rect[0],button_rect[1]))
     print("surrouding mines" + str(mineDetectCount))
-
     print("clearedSquare run")
 def gameBoard(): #displays game screen
     global gameStart
@@ -129,6 +131,7 @@ def gameBoard(): #displays game screen
     global button_rect
     global clickX
     global clickY
+    global flag_color
     gameOver = False
     flagCount = 25
     mineSpawn() #randomises mines
@@ -145,7 +148,7 @@ def gameBoard(): #displays game screen
     pygame.draw.rect(screen, button_light, quit_rect)
     screen.blit(quit_text,(quit_rect[0] + (70 - quit_text.get_width()) / 2,
                               quit_rect[1] + (50 / 2 - quit_text.get_height() / 2)))
-    flagCount_text = game_font.render(str(flagCount), True, (237, 19, 19))
+    flagCount_text = game_font.render(str(flagCount), True, flag_color)
     screen.blit(flagCount_text, (330, 20))
 
     #variables for button dimesnsions and placement
@@ -201,7 +204,7 @@ def gameBoard(): #displays game screen
                                         print("square already cleared/flagged")
                                 elif event.button == RIGHT:
                                     print('right clicked')
-                                    if yButtonState[clickY][clickX] == 0:
+                                    if yButtonState[clickY][clickX] == 0 and flagCount > 0:
                                         pygame.draw.rect(screen,flag_color,button_rect)
                                         print("square flagged")
                                         yButtonState[clickY][clickX] = 2
@@ -213,7 +216,9 @@ def gameBoard(): #displays game screen
                                         pygame.draw.rect(screen,button_light,button_rect)
                                         flagCount += 1
                                         yButtonState[clickY][clickX] = 0
-                                    flagCount_text = game_font.render(str(flagCount), True, (237, 19, 19))
+                                    else:
+                                        print("out of flags")
+                                    flagCount_text = game_font.render(str(flagCount), True, flag_color)
                                     flagRefreshRect = [330,20,70,50]
                                     pygame.draw.rect(screen,backColour,flagRefreshRect)
                                     screen.blit(flagCount_text, (330, 20))
