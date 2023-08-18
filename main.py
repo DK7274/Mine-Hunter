@@ -100,22 +100,22 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
         if clickX > 0:
             if yMines[clickY - 1][clickX - 1] == 1:
                 mineDetectCount += 1
-        if clickX < 8:
+        if clickX < 7:
             if yMines[clickY - 1][clickX + 1] == 1:
                 mineDetectCount += 1
-    if clickY < 8:
+    if clickY < 7:
         if yMines[clickY + 1][clickX] == 1:
             mineDetectCount += 1
         if clickX > 0:
             if yMines[clickY + 1][clickX - 1] == 1:
                 mineDetectCount += 1
-        if clickX < 8:
+        if clickX < 7:
             if yMines[clickY + 1][clickX + 1] == 1:
                 mineDetectCount += 1
     if clickX > 0:
         if yMines[clickY][clickX - 1] == 1:
             mineDetectCount += 1
-    if clickX < 8:
+    if clickX < 7:
         if yMines[clickY][clickX + 1] == 1:
             mineDetectCount += 1
 
@@ -145,7 +145,7 @@ def gameBoard(): #displays game screen
     pygame.draw.rect(screen, button_light, quit_rect)
     screen.blit(quit_text,(quit_rect[0] + (70 - quit_text.get_width()) / 2,
                               quit_rect[1] + (50 / 2 - quit_text.get_height() / 2)))
-    flagCount_text = game_font.render(str(flagCount), True, text_color)
+    flagCount_text = game_font.render(str(flagCount), True, (237, 19, 19))
     screen.blit(flagCount_text, (330, 20))
 
     #variables for button dimesnsions and placement
@@ -208,8 +208,15 @@ def gameBoard(): #displays game screen
                                         flagCount -= 1
                                     elif yButtonState[clickY][clickX] == 1:
                                         print("square already cleared")
-                                    else:
-                                        print("square already flagged")
+                                    elif yButtonState[clickY][clickX] == 2:
+                                        print("unflagging square")
+                                        pygame.draw.rect(screen,button_light,button_rect)
+                                        flagCount += 1
+                                        yButtonState[clickY][clickX] = 0
+                                    flagCount_text = game_font.render(str(flagCount), True, (237, 19, 19))
+                                    flagRefreshRect = [330,20,70,50]
+                                    pygame.draw.rect(screen,backColour,flagRefreshRect)
+                                    screen.blit(flagCount_text, (330, 20))
 
                                 break
                             else:
