@@ -90,14 +90,15 @@ def mineSpawn():
     print(yMines)
 
 
-#def gameBoardUpdate():
+def clearedSquare():
+    pygame.draw.rect(screen,backColour,button_rect)
 
-#def buttonDraw():
-
+    print("clearedSquare run")
 def gameBoard(): #displays game screen
     global gameStart
     global mouseX
     global mouseY
+    global button_rect
     gameOver = False
     flagCount = 25
     mineSpawn() #randomises mines
@@ -154,12 +155,18 @@ def gameBoard(): #displays game screen
                 button_rect = [buttonX,buttonY,button_width,button_height]
                 while clickY < 8 and gameOver is False: #left click for remove box checking on the y-axis
                     button_rect[1] = buttonY
-                    if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]): #checking whether the location is in the correct x axis
+                    if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]): #checking whether the location is in the correct y-axis
                         print("correct line")
                         while clickX < 8 and gameOver is False:
                             button_rect[0] = buttonX
-                            if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]:
+                            if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]: #checking whether click location is in the correct x-axis
                                 print("correct square")
+                                if yMines[clickY][clickX] == 1:
+                                    print("game Over, mine clicked!")
+                                elif yButtonState[clickY][clickX] == 0:
+                                    clearedSquare()
+                                else:
+                                    print("square already flagged")
                                 break
                             else:
                                 buttonX = buttonX + button_width + buttonSpacing
@@ -270,7 +277,7 @@ while not gameQuit:
             gameQuit = True
     if gameStart == True:
         gameBoard()
-    if guideOpen == True:
+    elif guideOpen == True:
         guideScreen()
     else:
         menuScreen()
