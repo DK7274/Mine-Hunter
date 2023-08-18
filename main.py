@@ -90,8 +90,26 @@ def mineSpawn():
     print(yMines)
 
 
-def clearedSquare():
+def clearedSquare(): #clears the square then subsequently checks surrounding squares to give a number
     pygame.draw.rect(screen,backColour,button_rect)
+    mineDetectCount = 0
+    if yMines[clickY+1][clickX] == 1:
+        mineDetectCount +=1
+    if yMines[clickY - 1][clickX] == 1:
+        mineDetectCount += 1
+    if yMines[clickY][clickX + 1] == 1:
+        mineDetectCount += 1
+    if yMines[clickY][clickX - 1] == 1:
+        mineDetectCount += 1
+    if yMines[clickY + 1][clickX + 1] ==  1:
+        mineDetectCount += 1
+    if yMines[clickY + 1][clickX - 1] == 1:
+        mineDetectCount += 1
+    if yMines[clickY - 1][clickX - 1] == 1:
+        mineDetectCount += 1
+    if yMines[clickY - 1][clickX + 1] == 1:
+        mineDetectCount += 1
+    print("surrouding mines" + str(mineDetectCount))
 
     print("clearedSquare run")
 def gameBoard(): #displays game screen
@@ -99,6 +117,8 @@ def gameBoard(): #displays game screen
     global mouseX
     global mouseY
     global button_rect
+    global clickX
+    global clickY
     gameOver = False
     flagCount = 25
     mineSpawn() #randomises mines
