@@ -92,23 +92,33 @@ def mineSpawn():
 
 def clearedSquare(): #clears the square then subsequently checks surrounding squares to give a number
     pygame.draw.rect(screen,backColour,button_rect)
+    yButtonState[clickY][clickX] = 1
     mineDetectCount = 0
-    if yMines[clickY+1][clickX] == 1:
-        mineDetectCount +=1
-    if yMines[clickY - 1][clickX] == 1:
-        mineDetectCount += 1
-    if yMines[clickY][clickX + 1] == 1:
-        mineDetectCount += 1
-    if yMines[clickY][clickX - 1] == 1:
-        mineDetectCount += 1
-    if yMines[clickY + 1][clickX + 1] ==  1:
-        mineDetectCount += 1
-    if yMines[clickY + 1][clickX - 1] == 1:
-        mineDetectCount += 1
-    if yMines[clickY - 1][clickX - 1] == 1:
-        mineDetectCount += 1
-    if yMines[clickY - 1][clickX + 1] == 1:
-        mineDetectCount += 1
+    if clickY > 0: #have to split them all up into seperate if statements because otherwise it rolls over through to the other edge
+        if yMines[clickY - 1][clickX] == 1:
+            mineDetectCount += 1
+        if clickX > 0:
+            if yMines[clickY - 1][clickX - 1] == 1:
+                mineDetectCount += 1
+        if clickX < 8:
+            if yMines[clickY - 1][clickX + 1] == 1:
+                mineDetectCount += 1
+    if clickY < 8:
+        if yMines[clickY + 1][clickX] == 1:
+            mineDetectCount += 1
+        if clickX > 0:
+            if yMines[clickY + 1][clickX - 1] == 1:
+                mineDetectCount += 1
+        if clickX < 8:
+            if yMines[clickY + 1][clickX + 1] == 1:
+                mineDetectCount += 1
+    if clickX > 0:
+        if yMines[clickY][clickX - 1] == 1:
+            mineDetectCount += 1
+    if clickX < 8:
+        if yMines[clickY][clickX + 1] == 1:
+            mineDetectCount += 1
+
     print("surrouding mines" + str(mineDetectCount))
 
     print("clearedSquare run")
@@ -125,6 +135,7 @@ def gameBoard(): #displays game screen
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill(backColour)
     text_color = (0, 0, 0)
+    flag_color = (237, 19, 19)
     button_light = (2, 127, 222)
     game_font = pygame.font.SysFont("impact", 20)
     quit_rect = [500,20,70,50]
@@ -166,7 +177,7 @@ def gameBoard(): #displays game screen
 
     while gameOver == False: #main loop for game, everything will on the game board will happen in here
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 mouseX,mouseY = event.pos
                 if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and #quit buton on the game board
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
@@ -181,12 +192,25 @@ def gameBoard(): #displays game screen
                             button_rect[0] = buttonX
                             if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]: #checking whether click location is in the correct x-axis
                                 print("correct square")
-                                if yMines[clickY][clickX] == 1:
-                                    print("game Over, mine clicked!")
-                                elif yButtonState[clickY][clickX] == 0:
-                                    clearedSquare()
-                                else:
-                                    print("square already flagged")
+                                if event.button == LEFT: #checking what happens on the left click, clear square, game over, or nothing
+                                    if yMines[clickY][clickX] == 1:
+                                        print("game Over, mine clicked!")
+                                    elif yButtonState[clickY][clickX] == 0:
+                                        clearedSquare()
+                                    else:
+                                        print("square already cleared/flagged")
+                                elif event.button == RIGHT:
+                                    print('right clicked')
+                                    if yButtonState[clickY][clickX] == 0:
+                                        pygame.draw.rect(screen,flag_color,button_rect)
+                                        print("square flagged")
+                                        yButtonState[clickY][clickX] = 2
+                                        flagCount -= 1
+                                    elif yButtonState[clickY][clickX] == 1:
+                                        print("square already cleared")
+                                    else:
+                                        print("square already flagged")
+
                                 break
                             else:
                                 buttonX = buttonX + button_width + buttonSpacing
@@ -202,9 +226,6 @@ def gameBoard(): #displays game screen
                 clickY = 0
                 buttonY = 100
 
-
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == RIGHT: #right click for flag checking
-                print('right mouse click')
 
         pygame.display.update()
     gameStart = False
