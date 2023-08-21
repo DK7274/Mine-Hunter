@@ -135,20 +135,18 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
 
 def gameOverWindow():
     global gameOver
+    global mouseX
+    global mouseY
     game_over_rect = (205,200,350,350)
     quit_rect = (250,390,100,75)
     restart_rect = (410,390,100,75)
     pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
-    pygame.draw.rect(screen,button_light,quit_rect)
-    pygame.draw.rect(screen,button_light,restart_rect)
     game_over_font = pygame.font.SysFont("impact",40)
     restart_quit_font = pygame.font.SysFont("impact",20)
     quit_text = restart_quit_font.render("QUIT",True,text_color)
     restart_text = restart_quit_font.render("RESTART",True,text_color)
     game_over_text = game_over_font.render("GAME OVER",True,flag_color)
     screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
-    screen.blit(quit_text,(quit_rect[0] + 30,quit_rect[1] + 25))
-    screen.blit(restart_text, (restart_rect[0] + 20, restart_rect[1] + 25))
 
     endWindow = False
     while endWindow == False: #loop preventing buttons on the board to be pressed, just the restart and the quit buttons
@@ -163,9 +161,20 @@ def gameOverWindow():
                         restart_rect[1] <= mouseY <= restart_rect[1] + restart_rect[3]):
                     gameOver = True
                     endWindow = True
-
             if event.type == pygame.MOUSEMOTION:
                 mouseX, mouseY = event.pos
+        if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
+                quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
+            pygame.draw.rect(screen, button_over_color, quit_rect)
+        elif (restart_rect[0] <= mouseX <= restart_rect[0] + restart_rect[2] and
+                restart_rect[1] <= mouseY <= restart_rect[1] + restart_rect[3]):
+            pygame.draw.rect(screen, button_over_color, restart_rect)
+        else:
+            pygame.draw.rect(screen, button_light, quit_rect)
+            pygame.draw.rect(screen, button_light, restart_rect)
+        screen.blit(quit_text, (quit_rect[0] + 30, quit_rect[1] + 25))
+        screen.blit(restart_text, (restart_rect[0] + 20, restart_rect[1] + 25))
+
         pygame.display.update()
 
 
