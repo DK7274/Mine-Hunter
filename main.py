@@ -2,7 +2,7 @@ import pygame
 import random
 
 #variables for mine randomiser
-mineCount = 25 #overall amound of mines
+mineCount = 20 #overall amound of mines
 
 mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
 mineRow2 = [0,0,0,0,0,0,0,0]
@@ -119,11 +119,23 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
     if clickX < 7:
         if yMines[clickY][clickX + 1] == 1:
             mineDetectCount += 1
-    if mineDetectCount > 1:
+    if mineDetectCount > 0:
         surround_text = surround_font.render(str(mineDetectCount),True,flag_color)
         screen.blit(surround_text,(button_rect[0],button_rect[1]))
     print("surrouding mines" + str(mineDetectCount))
     print("clearedSquare run")
+
+def gameOverWindow():
+    game_over_rect = (205,200,350,350)
+    quit_rect = (250,390,100,75)
+    restart_rect = (410,390,100,75)
+    pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
+    pygame.draw.rect(screen,button_light,quit_rect)
+    pygame.draw.rect(screen,button_light,restart_rect)
+    endWindow = True
+
+
+
 def gameBoard(): #displays game screen
     global gameStart
     global mouseX
@@ -132,8 +144,9 @@ def gameBoard(): #displays game screen
     global clickX
     global clickY
     global flag_color
+    global button_light
     gameOver = False
-    flagCount = 25
+    flagCount = 20
     mineSpawn() #randomises mines
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill(backColour)
@@ -198,6 +211,7 @@ def gameBoard(): #displays game screen
                                 if event.button == LEFT: #checking what happens on the left click, clear square, game over, or nothing
                                     if yMines[clickY][clickX] == 1:
                                         print("game Over, mine clicked!")
+                                        gameOverWindow()
                                     elif yButtonState[clickY][clickX] == 0:
                                         clearedSquare()
                                     else:
