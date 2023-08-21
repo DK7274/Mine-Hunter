@@ -51,6 +51,14 @@ pygame.display.flip()
 width = screen.get_width()
 height = screen.get_height()
 
+#variables for colours that don't need to be in functions
+text_color = (0, 0, 0)
+flag_color = (237, 19, 19)
+button_light = (2, 127, 222)
+title_text_color = (25, 40, 156)
+button_color = (25, 40, 156)
+button_over_color = (6, 17, 99)
+
 #bool that checks if game quit or not
 gameQuit = False
 
@@ -126,13 +134,39 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
     print("clearedSquare run")
 
 def gameOverWindow():
+    global gameOver
     game_over_rect = (205,200,350,350)
     quit_rect = (250,390,100,75)
     restart_rect = (410,390,100,75)
     pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
     pygame.draw.rect(screen,button_light,quit_rect)
     pygame.draw.rect(screen,button_light,restart_rect)
-    endWindow = True
+    game_over_font = pygame.font.SysFont("impact",40)
+    restart_quit_font = pygame.font.SysFont("impact",20)
+    quit_text = restart_quit_font.render("QUIT",True,text_color)
+    restart_text = restart_quit_font.render("RESTART",True,text_color)
+    game_over_text = game_over_font.render("GAME OVER",True,flag_color)
+    screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
+    screen.blit(quit_text,(quit_rect[0] + 30,quit_rect[1] + 25))
+    screen.blit(restart_text, (restart_rect[0] + 20, restart_rect[1] + 25))
+
+    endWindow = False
+    while endWindow == False: #loop preventing buttons on the board to be pressed, just the restart and the quit buttons
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouseX,mouseY = event.pos
+                if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and  # quit buton on the game over pop-up
+                        quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
+                    gameOver = True
+                    endWindow = True
+                if (restart_rect[0] <= mouseX <= restart_rect[0] + restart_rect[2] and  # restart button on the game over pop-up, resets all mine positions and states
+                        restart_rect[1] <= mouseY <= restart_rect[1] + restart_rect[3]):
+                    gameOver = True
+                    endWindow = True
+
+            if event.type == pygame.MOUSEMOTION:
+                mouseX, mouseY = event.pos
+        pygame.display.update()
 
 
 
@@ -143,16 +177,12 @@ def gameBoard(): #displays game screen
     global button_rect
     global clickX
     global clickY
-    global flag_color
-    global button_light
+    global gameOver
     gameOver = False
     flagCount = 20
     mineSpawn() #randomises mines
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill(backColour)
-    text_color = (0, 0, 0)
-    flag_color = (237, 19, 19)
-    button_light = (2, 127, 222)
     game_font = pygame.font.SysFont("impact", 20)
     quit_rect = [500,20,70,50]
     quit_text = game_font.render("QUIT",True, text_color)
@@ -269,10 +299,6 @@ def menuScreen(): #displays menu screen to start game, open help screen, and qui
     #blitting the menu window#
     screen.fill((0,26,46))
     #variables for buttons
-    button_text_color = (0,0,0)
-    title_text_color = (25,40,156)
-    button_color = (25,40,156)
-    button_over_color = (6,17,99)
     button_width = 200
     button_height = 100
     play_rect = [(screen.get_width() - button_width) / 2 , 250,button_width, button_height]
@@ -280,9 +306,9 @@ def menuScreen(): #displays menu screen to start game, open help screen, and qui
     quit_rect = [(560-button_width),400,button_width,button_height]
     #fonts and texts for the buttons
     button_font = pygame.font.SysFont("impact",20)
-    play_text = button_font.render("PLAY", True, button_text_color)
-    guide_text = button_font.render("GUIDE",True,button_text_color)
-    quit_text = button_font.render("QUIT",True, button_text_color)
+    play_text = button_font.render("PLAY", True, text_color)
+    guide_text = button_font.render("GUIDE",True,text_color)
+    quit_text = button_font.render("QUIT",True, text_color)
     #font and text for the title
     title_font = pygame.font.SysFont("impact", 50)
     title_text = title_font.render("MINEHUNTER", True, title_text_color)
