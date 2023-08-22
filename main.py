@@ -1,35 +1,6 @@
 import pygame
 import random
 
-#variables for mine randomiser
-mineCount = 20 #overall amound of mines
-
-mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
-mineRow2 = [0,0,0,0,0,0,0,0]
-mineRow3 = [0,0,0,0,0,0,0,0]
-mineRow4 = [0,0,0,0,0,0,0,0]
-mineRow5 = [0,0,0,0,0,0,0,0]
-mineRow6 = [0,0,0,0,0,0,0,0]
-mineRow7 = [0,0,0,0,0,0,0,0]
-mineRow8 = [0,0,0,0,0,0,0,0]
-
-yMines = [mineRow1,mineRow2,mineRow3,mineRow4,mineRow5,mineRow6,mineRow7,mineRow8]
-#array that holds mine arrays within it to be called
-
-buttonX = [1,2,3,4,5,6,7,8]
-buttonY = [1,2,3,4,5,6,7,8]
-
-buttonState1 = [0,0,0,0,0,0,0,0] #set of arrays for button detection
-buttonState2 = [0,0,0,0,0,0,0,0]
-buttonState3 = [0,0,0,0,0,0,0,0]
-buttonState4 = [0,0,0,0,0,0,0,0]
-buttonState5 = [0,0,0,0,0,0,0,0]
-buttonState6 = [0,0,0,0,0,0,0,0]
-buttonState7 = [0,0,0,0,0,0,0,0]
-buttonState8 = [0,0,0,0,0,0,0,0]
-
-yButtonState = [buttonState1,buttonState2,buttonState3,buttonState4,buttonState5,buttonState6,buttonState7,buttonState8]
-#array that holds button arrays within it to be called
 
 pygame.init() # initializing pygame
 
@@ -75,6 +46,37 @@ class mine(object): #tells pyhton object
 def mineSpawn():
     global mineCount
     global yMines
+    global yButtonState
+
+    #variables for mine randomiser
+    mineCount = 20 #overall amound of mines
+
+    mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
+    mineRow2 = [0,0,0,0,0,0,0,0]
+    mineRow3 = [0,0,0,0,0,0,0,0]
+    mineRow4 = [0,0,0,0,0,0,0,0]
+    mineRow5 = [0,0,0,0,0,0,0,0]
+    mineRow6 = [0,0,0,0,0,0,0,0]
+    mineRow7 = [0,0,0,0,0,0,0,0]
+    mineRow8 = [0,0,0,0,0,0,0,0]
+
+    yMines = [mineRow1,mineRow2,mineRow3,mineRow4,mineRow5,mineRow6,mineRow7,mineRow8]
+
+    #array that holds mine arrays within it to be called
+
+    buttonState1 = [0,0,0,0,0,0,0,0] #set of arrays for button detection
+    buttonState2 = [0,0,0,0,0,0,0,0]
+    buttonState3 = [0,0,0,0,0,0,0,0]
+    buttonState4 = [0,0,0,0,0,0,0,0]
+    buttonState5 = [0,0,0,0,0,0,0,0]
+    buttonState6 = [0,0,0,0,0,0,0,0]
+    buttonState7 = [0,0,0,0,0,0,0,0]
+    buttonState8 = [0,0,0,0,0,0,0,0]
+
+    yButtonState = [buttonState1,buttonState2,buttonState3,buttonState4,buttonState5,buttonState6,buttonState7,buttonState8]
+
+
+
     xMines = [0,0,0,0,0,0,0,0] #array for x mines to come from
     while mineCount > 0: #sequence to sort the extra 20 mines into different X axis
         for n in range(0,len(xMines)): #repeats through the array until all mines are used
@@ -129,7 +131,7 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
             mineDetectCount += 1
     if mineDetectCount > 0:
         surround_text = surround_font.render(str(mineDetectCount),True,flag_color)
-        screen.blit(surround_text,(button_rect[0],button_rect[1]))
+        screen.blit(surround_text,(button_rect[0] + 20,button_rect[1] + 5))
     print("surrouding mines" + str(mineDetectCount))
     print("clearedSquare run")
 
@@ -159,8 +161,8 @@ def gameOverWindow():
                     endWindow = True
                 if (restart_rect[0] <= mouseX <= restart_rect[0] + restart_rect[2] and  # restart button on the game over pop-up, resets all mine positions and states
                         restart_rect[1] <= mouseY <= restart_rect[1] + restart_rect[3]):
-                    gameOver = True
                     endWindow = True
+                    gameBoard()
             if event.type == pygame.MOUSEMOTION:
                 mouseX, mouseY = event.pos
         if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
