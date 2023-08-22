@@ -9,10 +9,6 @@ mouseX,mouseY = (0,0) #sets mouse coordinate
 LEFT = 1 #variables for detection of which mouse button is pressed
 RIGHT = 3
 
-#section for sprite images to be defined
-mineImage = pygame.image.load("Images\mine.png")
-mineImage = pygame.transform.scale(mineImage,(20,20)) #squaring and making image smaller
-
 
 #displaying window with height 1000 and width 950, with a blue background
 screen = pygame.display.set_mode((700,700))
@@ -22,26 +18,19 @@ pygame.display.flip()
 width = screen.get_width()
 height = screen.get_height()
 
-#variables for colours that don't need to be in functions
+#variables for colours and dimensions that don't need to be in functions
 text_color = (0, 0, 0)
 flag_color = (237, 19, 19)
 button_light = (2, 127, 222)
 title_text_color = (25, 40, 156)
 button_color = (25, 40, 156)
 button_over_color = (6, 17, 99)
+button_width = 60
+button_height = 60
+buttonSpacing = 10
 
 #bool that checks if game quit or not
 gameQuit = False
-
-#creating mine object
-class mine(object): #tells pyhton object
-    def __init__(self,x,y,width,height):   #the def function defines what code will run when a new type of this object is created.
-        self.x= x
-        self.y = y
-        self.width = width
-        self.height = height
-    def draw(self,screen):
-        screen.blit(mineImage,(self.x,self.y))
 
 def mineSpawn():
     global mineCount
@@ -49,7 +38,7 @@ def mineSpawn():
     global yButtonState
 
     #variables for mine randomiser
-    mineCount = 20 #overall amound of mines
+    mineCount = 15 #overall amound of mines
 
     mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
     mineRow2 = [0,0,0,0,0,0,0,0]
@@ -142,6 +131,19 @@ def gameOverWindow():
     game_over_rect = (205,200,350,350)
     quit_rect = (250,390,100,75)
     restart_rect = (410,390,100,75)
+
+    #this section prints the mines on top of all squares that have mines on them
+    mineCheckX = 0
+    mineCheckY = 0
+    while mineCheckY <= 7:
+        while mineCheckX <= 7:
+            if yMines[mineCheckY][mineCheckX] == 1:
+                mineTest_rect = (100 + mineCheckX * (button_width + buttonSpacing), 100 + mineCheckY * (button_height + buttonSpacing),60,60)
+                pygame.draw.rect(screen,text_color,mineTest_rect)
+            mineCheckX += 1
+        mineCheckX = 0
+        mineCheckY += 1
+
     pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
     game_over_font = pygame.font.SysFont("impact",40)
     restart_quit_font = pygame.font.SysFont("impact",20)
@@ -149,20 +151,6 @@ def gameOverWindow():
     restart_text = restart_quit_font.render("RESTART",True,text_color)
     game_over_text = game_over_font.render("GAME OVER",True,flag_color)
     screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
-
-    #this section printsthe mines on top of al squares that have mines on them
-    #x = 8
-    #y = 8
-    #while y > 0:
-    #    while x > 0:
-    #        button_rect = (buttonX,buttonY,button_width,button_height)
-    #        pygame.draw.rect(screen,button_light,button_rect)
-    #        buttonX = buttonX + button_width + buttonSpacing
-    #        buttonXCount -= 1
-    #    buttonX = 100
-    #    buttonXCount = 8
-    #    buttonY = buttonY + button_height + buttonSpacing
-    #    buttonYCount -= 1
 
 
 
@@ -206,7 +194,7 @@ def gameBoard(): #displays game screen
     global clickY
     global gameOver
     gameOver = False
-    flagCount = 20
+    flagCount = 15
     mineSpawn() #randomises mines
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill(backColour)
@@ -222,11 +210,8 @@ def gameBoard(): #displays game screen
     screen.blit(flagCount_text, (330, 20))
 
     #variables for button dimesnsions and placement
-    button_width = 60
-    button_height = 60
     buttonX = 100
     buttonY = 100
-    buttonSpacing = 10
     buttonXCount = 8
     buttonYCount = 8
     clickX = 0
