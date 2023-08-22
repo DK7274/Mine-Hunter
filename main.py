@@ -150,6 +150,22 @@ def gameOverWindow():
     game_over_text = game_over_font.render("GAME OVER",True,flag_color)
     screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
 
+    #this section printsthe mines on top of al squares that have mines on them
+    #x = 8
+    #y = 8
+    #while y > 0:
+    #    while x > 0:
+    #        button_rect = (buttonX,buttonY,button_width,button_height)
+    #        pygame.draw.rect(screen,button_light,button_rect)
+    #        buttonX = buttonX + button_width + buttonSpacing
+    #        buttonXCount -= 1
+    #    buttonX = 100
+    #    buttonXCount = 8
+    #    buttonY = buttonY + button_height + buttonSpacing
+    #    buttonYCount -= 1
+
+
+
     endWindow = False
     while endWindow == False: #loop preventing buttons on the board to be pressed, just the restart and the quit buttons
         for event in pygame.event.get():
