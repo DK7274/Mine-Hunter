@@ -36,9 +36,11 @@ def mineSpawn():
     global mineCount
     global yMines
     global yButtonState
+    global squareCount
 
     #variables for mine randomiser
     mineCount = 15 #overall amound of mines
+    squareCount = 49 #number of clearable squares
 
     mineRow1 = [0,0,0,0,0,0,0,0] #set of arrays for mine placement
     mineRow2 = [0,0,0,0,0,0,0,0]
@@ -90,6 +92,7 @@ def mineSpawn():
 
 
 def clearedSquare(): #clears the square then subsequently checks surrounding squares to give a number
+    global squareCount
     pygame.draw.rect(screen,backColour,button_rect)
     yButtonState[clickY][clickX] = 1
     surround_font = pygame.font.SysFont("impact",40)
@@ -123,11 +126,13 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
         screen.blit(surround_text,(button_rect[0] + 20,button_rect[1] + 5))
     print("surrouding mines" + str(mineDetectCount))
     print("clearedSquare run")
+    squareCount -= 1
 
 def gameOverWindow():
     global gameOver
     global mouseX
     global mouseY
+    global win
     game_over_rect = (205,200,350,350)
     quit_rect = (250,390,100,75)
     restart_rect = (410,390,100,75)
@@ -135,23 +140,29 @@ def gameOverWindow():
     #this section prints the mines on top of all squares that have mines on them
     mineCheckX = 0
     mineCheckY = 0
-    while mineCheckY <= 7:
-        while mineCheckX <= 7:
-            if yMines[mineCheckY][mineCheckX] == 1:
-                mineTest_rect = (100 + mineCheckX * (button_width + buttonSpacing), 100 + mineCheckY * (button_height + buttonSpacing),60,60)
-                pygame.draw.rect(screen,text_color,mineTest_rect)
-            mineCheckX += 1
-        mineCheckX = 0
-        mineCheckY += 1
 
-    pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
+
     game_over_font = pygame.font.SysFont("impact",40)
     restart_quit_font = pygame.font.SysFont("impact",20)
     quit_text = restart_quit_font.render("QUIT",True,text_color)
     restart_text = restart_quit_font.render("RESTART",True,text_color)
     game_over_text = game_over_font.render("GAME OVER",True,flag_color)
-    screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
+    game_win_text = game_over_font.render("GAME WIN",True,flag_color)
 
+    if gameWin is not True:
+        while mineCheckY <= 7:
+            while mineCheckX <= 7:
+                if yMines[mineCheckY][mineCheckX] == 1:
+                    mineTest_rect = (100 + mineCheckX * (button_width + buttonSpacing), 100 + mineCheckY * (button_height + buttonSpacing),60,60)
+                    pygame.draw.rect(screen,text_color,mineTest_rect)
+                mineCheckX += 1
+            mineCheckX = 0
+            mineCheckY += 1
+        pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
+        screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
+    else:
+        pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
+        screen.blit(game_win_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
 
 
     endWindow = False
@@ -193,9 +204,11 @@ def gameBoard(): #displays game screen
     global clickX
     global clickY
     global gameOver
+    global gameWin
     gameOver = False
     flagCount = 15
     mineSpawn() #randomises mines
+    gameWin = False
     # setting up variables for displaying timer, flag counter, buttons#
     screen.fill(backColour)
     game_font = pygame.font.SysFont("impact", 20)
@@ -251,11 +264,14 @@ def gameBoard(): #displays game screen
                             if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]: #checking whether click location is in the correct x-axis
                                 print("correct square")
                                 if event.button == LEFT: #checking what happens on the left click, clear square, game over, or nothing
-                                    if yMines[clickY][clickX] == 1:
+                                    if yMines[clickY][clickX] == 1 and yButtonState[clickY][clickX] != 2:
                                         print("game Over, mine clicked!")
                                         gameOverWindow()
                                     elif yButtonState[clickY][clickX] == 0:
                                         clearedSquare()
+                                        if squareCount == 0:
+                                            gameWin = True
+                                            gameOverWindow()
                                     else:
                                         print("square already cleared/flagged")
                                 elif event.button == RIGHT:
