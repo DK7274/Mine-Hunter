@@ -1,6 +1,8 @@
 import pygame
 import random
+import os
 
+path = 'Mine_Hunter_Guide.pdf'
 
 pygame.init() # initializing pygame
 
@@ -10,7 +12,7 @@ LEFT = 1 #variables for detection of which mouse button is pressed
 RIGHT = 3
 
 
-#displaying window with height 1000 and width 950, with a blue background
+#displaying window with height 700 and width 700, with a blue background
 screen = pygame.display.set_mode((700,700))
 backColour = (0,26,46)
 screen.fill(backColour)
@@ -94,7 +96,7 @@ def mineSpawn():
 def clearedSquare(): #clears the square then subsequently checks surrounding squares to give a number
     global squareCount
     pygame.draw.rect(screen,backColour,button_rect)
-    yButtonState[clickY][clickX] = 1
+    yButtonState[clickY][clickX] = 1 #changes state of button to cleared
     surround_font = pygame.font.SysFont("impact",40)
     mineDetectCount = 0
     if clickY > 0: #have to split them all up into seperate if statements because otherwise it rolls over through to the other edge
@@ -126,9 +128,9 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
         screen.blit(surround_text,(button_rect[0] + 20,button_rect[1] + 5))
     print("surrouding mines" + str(mineDetectCount))
     print("clearedSquare run")
-    squareCount -= 1
+    squareCount -= 1 #
 
-def gameOverWindow():
+def gameOverWindow(): #game over, through either game loss or game win
     global gameOver
     global mouseX
     global mouseY
@@ -142,6 +144,7 @@ def gameOverWindow():
     mineCheckY = 0
 
 
+    #setup for texts for both the buttons, and the game over or game win title
     game_over_font = pygame.font.SysFont("impact",40)
     restart_quit_font = pygame.font.SysFont("impact",20)
     quit_text = restart_quit_font.render("QUIT",True,text_color)
@@ -149,10 +152,11 @@ def gameOverWindow():
     game_over_text = game_over_font.render("GAME OVER",True,flag_color)
     game_win_text = game_over_font.render("GAME WIN",True,flag_color)
 
-    if gameWin is not True:
+    if gameWin is not True: #if statement for if the game has been lost (just changes the title and whether mine
+                            #locations are displayed on the board)
         while mineCheckY <= 7:
             while mineCheckX <= 7:
-                if yMines[mineCheckY][mineCheckX] == 1:
+                if yMines[mineCheckY][mineCheckX] == 1: #changes mined squares colour to  blacks
                     mineTest_rect = (100 + mineCheckX * (button_width + buttonSpacing), 100 + mineCheckY * (button_height + buttonSpacing),60,60)
                     pygame.draw.rect(screen,text_color,mineTest_rect)
                 mineCheckX += 1
@@ -160,7 +164,7 @@ def gameOverWindow():
             mineCheckY += 1
         pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
         screen.blit(game_over_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
-    else:
+    else: #if statement for if the game has been won
         pygame.draw.rect(screen, (0, 90, 158),game_over_rect)
         screen.blit(game_win_text,(game_over_rect[0] + game_over_text.get_width() / 2,220))
 
@@ -316,6 +320,7 @@ def gameBoard(): #displays game screen
 
 def guideScreen(): #displays help screen with tutorial
     global guideOpen
+    os.system(path)
     print('guide')
     guideOpen = False
 def menuScreen(): #displays menu screen to start game, open help screen, and quit
