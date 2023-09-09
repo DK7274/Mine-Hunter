@@ -127,7 +127,6 @@ def clearedSquare(): #clears the square then subsequently checks surrounding squ
         surround_text = surround_font.render(str(mineDetectCount),True,flag_color)
         screen.blit(surround_text,(button_rect[0] + 20,button_rect[1] + 5))
     print("surrouding mines" + str(mineDetectCount))
-    print("clearedSquare run")
     squareCount -= 1 #
 
 def gameOverWindow(): #game over, through either game loss or game win
@@ -257,29 +256,21 @@ def gameBoard(): #displays game screen
                 if (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and #quit buton on the game board
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
                     gameOver = True
-                print("clicked")
                 button_rect = [buttonX,buttonY,button_width,button_height]
                 while clickY < 8 and gameOver is False: #left click for remove box checking on the y-axis
                     button_rect[1] = buttonY
                     if (button_rect[1] <= mouseY <= button_rect[1] + button_rect[3]): #checking whether the location is in the correct y-axis
-                        print("correct line")
                         while clickX < 8 and gameOver is False:
                             button_rect[0] = buttonX
                             if button_rect[0] <= mouseX <= button_rect[0] + button_rect[2]: #checking whether click location is in the correct x-axis
-                                print("correct square")
                                 if event.button == LEFT: #checking what happens on the left click, clear square, game over, or nothing
                                     if yMines[clickY][clickX] == 1 and yButtonState[clickY][clickX] != 2:
-                                        print("game Over, mine clicked!")
                                         gameOverWindow()
                                     elif yButtonState[clickY][clickX] == 0:
                                         clearedSquare()
                                         if squareCount == 0:
                                             gameWin = True
                                             gameOverWindow()
-                                    else:
-                                        print("square already cleared/flagged")
-                                elif event.button == RIGHT:
-                                    print('right clicked')
                                     if yButtonState[clickY][clickX] == 0 and flagCount > 0:
                                         pygame.draw.rect(screen,flag_color,button_rect)
                                         print("square flagged")
@@ -288,7 +279,6 @@ def gameBoard(): #displays game screen
                                     elif yButtonState[clickY][clickX] == 1:
                                         print("square already cleared")
                                     elif yButtonState[clickY][clickX] == 2:
-                                        print("unflagging square")
                                         pygame.draw.rect(screen,button_light,button_rect)
                                         flagCount += 1
                                         yButtonState[clickY][clickX] = 0
@@ -303,14 +293,12 @@ def gameBoard(): #displays game screen
                             else:
                                 buttonX = buttonX + button_width + buttonSpacing
                                 clickX += 1
-                            print(str(clickX))
                         clickX = 0
                         buttonX = 100
                         break
                     else:
                         buttonY = buttonY + button_height + buttonSpacing
                         clickY += 1
-                    print(str(clickY))
                 clickY = 0
                 buttonY = 100
 
@@ -321,7 +309,6 @@ def gameBoard(): #displays game screen
 def guideScreen(): #displays help screen with tutorial
     global guideOpen
     os.system(path)
-    print('guide')
     guideOpen = False
 def menuScreen(): #displays menu screen to start game, open help screen, and quit
     global mouseX
@@ -353,12 +340,10 @@ def menuScreen(): #displays menu screen to start game, open help screen, and qui
 
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN: #event triggered on clicking the mouse
-            print(event.button)
             mouseX,mouseY = event.pos #get mouse pos
             if(play_rect[0] <= mouseX <= play_rect[0] + play_rect[2] and
             play_rect[1] <= mouseY <= play_rect[1] + play_rect[3]):
                 gameStart = True #if click on the button then you start the game#
-                print("gameStart")
             elif (quit_rect[0] <= mouseX <= quit_rect[0] + quit_rect[2] and
             quit_rect[1] <= mouseY <= quit_rect[1] + quit_rect[3]):
                 gameQuit = True #if clcik on button then game quits
