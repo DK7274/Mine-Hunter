@@ -1,7 +1,7 @@
 import pygame
 import random
 import os
-
+##
 path = 'Mine_Hunter_Guide.pdf'
 
 pygame.init() # initializing pygame
